@@ -1,0 +1,17 @@
+# Explicit public-source allowlist. Build inputs, game strings and media stay local.
+*
+!docs/
+!tools/
+!tools/ratline/
+!tools/ratline/ko_patcher/
+!.gitignore
+!CHANGELOG.md
+!README.md
+!docs/BUILDING.md
+!requirements.txt
+!tools/ratline/baseline.py
+!tools/ratline/bin_delta.py
+!tools/ratline/build_release.py
+!tools/ratline/bundle_delta.py
+!tools/ratline/ko_patcher/bundle_apply.py
+!tools/ratline/ko_patcher/ratline_patch.py

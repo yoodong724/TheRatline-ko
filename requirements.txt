@@ -1,0 +1,7 @@
+UnityPy==1.25.4
+attrs==26.1.0
+lz4==4.4.5
+fsspec==2026.9.0
+brotli==1.2.0
+pillow==12.3.0
+tpk_ar==0.2.4
