@@ -30,7 +30,7 @@ python3.13 -m venv .venv-ratline
 
 ## 추가로 필요한 비공개 입력
 
-1. 지원 빌드의 정품 원본 파일과 파일 경로·크기·SHA-256을 기록한 `data/source/23882898/manifest.json`.
+1. 지원 빌드의 정품 원본 파일과 파일 경로·크기·SHA-256을 기록한 `data/source/<build>/manifest.json`.
 2. 번역·이미지·영상·글꼴·실행 보정을 적용하고 검수한 번들/DLL/추가 파일.
 3. `runtime/<build>/<revision>/manifest.json`: `build_id`, `revision`, `canonical_revision`, `payload` 등을 가진 런타임 manifest. `payload`에는 각 게임 상대 경로, 크기, 해시, 교체/추가 방식이 필요합니다.
 4. `--payload-sources` JSON: `runtime_manifest`와 각 payload의 게임 경로(`path`)·제작 파일 경로(`source`)·해시(`sha256`)를 연결하는 `sources` 배열.
@@ -61,11 +61,12 @@ python3.13 -m venv .venv-ratline
 
 # 별도로 준비한 manifest와 제작물로 설치용 ZIP 조립
 .venv-ratline/bin/python tools/ratline/build_release.py \
-  --release ratline-ko-23882898-rc3 --version ratline-ko-23882898-rc3 \
+  --release ratline-ko-26438858 --version ratline-ko-26438858 \
   --payload-sources /path/to/private-payload-sources.json \
+  --source-manifest /path/to/private-source-manifest.json \
   --bundle-delta build/new-bundle-delta \
   --dll-delta build/Assembly-CSharp.dll.bdelta \
   --docs /path/to/release-docs --cache build/release-cache
 ```
 
-`build_release.py`는 `dist/<release>/`가 이미 있으면 덮어쓰지 않습니다. 생성한 파일과 manifest의 해시를 비교하고, 별도 테스트 사본에서 설치·제거·실패 복구와 변경 범위의 게임 표시를 확인해야 합니다. **도구 실행 성공은 번역·이미지·플레이 검수 통과를 뜻하지 않습니다.**
+`build_release.py`는 원본 manifest의 빌드와 runtime manifest의 빌드가 다르면 중단하고, `dist/<release>/`가 이미 있으면 덮어쓰지 않습니다. `--source-manifest`를 생략하면 `data/source/<runtime build>/manifest.json`을 사용합니다. 생성한 파일과 manifest의 해시를 비교하고, 별도 테스트 사본에서 설치·제거·실패 복구와 변경 범위의 게임 표시를 확인해야 합니다. **도구 실행 성공은 번역·이미지·플레이 검수 통과를 뜻하지 않습니다.**

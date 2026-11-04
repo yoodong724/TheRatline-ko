@@ -79,6 +79,7 @@ def main():
     p.add_argument('--dll-delta', type=Path, required=True, help='.bdelta file (its .lit sibling is copied too)')
     p.add_argument('--docs', type=Path, required=True, help='directory with README.txt, CHANGELOG.txt, LICENSES/')
     p.add_argument('--cache', type=Path, required=True)
+    p.add_argument('--source-manifest', type=Path, help='source file manifest for the runtime build; defaults to data/source/<build>/manifest.json')
     a = p.parse_args()
     dist = REPO / 'dist' / a.release
     root = dist / 'KoreanPatch'
@@ -86,7 +87,11 @@ def main():
         p.error('New release directory required')
     sources = json.loads(a.payload_sources.read_text())
     runtime = json.loads((REPO / sources['runtime_manifest']).read_text())
-    original = {f['path']: f for f in json.loads((REPO / 'data/source/23882898/manifest.json').read_text())['files']}
+    source_manifest = a.source_manifest or REPO / 'data/source' / str(runtime['build_id']) / 'manifest.json'
+    source = json.loads(source_manifest.read_text())
+    if str(source['build_id']) != str(runtime['build_id']):
+        p.error('Source manifest build does not match runtime build')
+    original = {f['path']: f for f in source['files']}
     src = {s['path']: s for s in sources['sources']}
     root.mkdir(parents=True)
     (root / 'bin').mkdir()
